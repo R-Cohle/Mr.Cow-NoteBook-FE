@@ -1,0 +1,131 @@
+---------------💖 浏览器加载 💖---------------
+传统方法：
+HTML 网页中，浏览器通过 <script> 标签加载 JS 脚本
+
+1. 页面内嵌的脚本
+<script type="application/javascript">
+  // module code
+</script>
+
+2. 外部脚本
+<script type="application/javascript" src="path/to/myModule.js"></script>
+
+默认情况下，浏览器是 同步加载 JS 脚本的
+浏览器允许脚本异步加载：使用 defer 或 async
+渲染引擎遇到这一行代码，就会开始下载外部脚本，但不会等它下载和执行，而是直接执行后面的命令
+
+defer：等到整个页面在内存中正常渲染结束（DOM结构完全生成，以及其他脚本执行完成），才会执行
+async：一旦下载完渲染引擎就会中断渲染，执行这个脚本后，再继续渲染
+
+总结：defer是“渲染完再执行”，async是“下载完就执行”。此外，若有多个defer脚本，会按照它们在页面出现的顺序加载，而多个async脚本不能保证加载顺序
+
+---------------💖 加载规则 💖---------------
+<script type="module" src="xxx"></script>
+等价于
+<script type="module" src="xxx" defer></script>
+
+浏览器对带有 type="module" 的 script，都是异步加载，不会阻塞，即到整个页面渲染完，再执行模块脚本，等同于打开了 defer
+
+ES6 模块也允许内嵌在网页中
+此外，可以利用顶层的 this 是否等于 undefined 这个语法点侦测当前代码是否在 ES6 模块中
+
+---------------💖 ESM 与 CJS 的差异 💖---------------
+有 3 个重大差异
+· CJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用
+· CJS 模块是运行时加载，ES6 模块是编译时输出接口
+· CJS 模块的 require() 是同步加载模块，ES6 模块的 import 命令是异步加载，有一个独立的模块依赖的解析阶段
+
+第二个差异：
+1. 是因为 CJS 加载的是一个对象（即 module.exports 属性），该对象 只有在脚本运行完 才会生成
+2. 而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成
+
+第一个差异：
+1. CJS 输出的是值得拷贝，也就是说，一旦输出一个值，模块外部的变化就影响不到这个值
+2. ES6 模块的运行机制与 CJS 不一样，JS 引擎对脚本静态分析的时候，遇到模块加载命令 import，就会生成一个只读引用，等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。ES6 模块是动态引用，并不会缓存值，模块里面的变量绑定其所在的模块。
+此外，ESM 中，输入变量是只读的，对它重新赋值会报错，export 通过接口，输出的是同一个值
+例子：// lib.js
+export let obj = {};
+// main.js
+import {obj} from './lib';
+obj.a = 123 // √
+obj   = {}  // ×
+
+---------------💖 NodeJS 的模块加载方法 💖---------------
+JS 目前有两种模块 ESM 和 CJS
+
+CJS 为 NodeJS 专用，与 ES6 模块不兼容
+
+CJS 使用 require() 和 module.exports 和 exports['输出的变量']
+ESM 使用 import 和 export 和 import()
+
+Node13.2 开始，默认打开了 ESM 支持
+NodeJS 要求 ES6 模块 .mjs 后缀，即只要 JS 脚本中用了 import 或 export 就得 .mjs (.mjs 默认严格模式)
+
+若不想改 .mjs，就在 package.json 指定 type 字段为 module
+
+总结：.mjs 总以 ES6 模块加载，.cjs 总以 CJS 模块加载
+.js 总以 package.json 中 type 字段的设置为准 ("module"/"commonjs"/空(就用cjs))
+
+------------------💖 加载 💖------------------
+CJS 的 require() 不能加载 ES6 模块，会报错，只能使用 import() 这个方法加载
+CJS 的 require() 不支持 ESM 原因之一：ESM中可用顶层 await，导致无法被同步加载
+
+ESM 的 import 可加载 CJS 模块，但只能整体加载，不能只加载单一的输出项
+
+------------💖 同时支持两种格式的模块 💖------------
+若原始模块是 ES6 格式，那么需要给出一个整体输出接口，比如 export default obj，使得 CJS 可以用 import() 进行加载
+
+若原始模块是 CJS 格式，那么可以加一个包装层
+import cjsModule from './index.js';
+export const foo = cjsModule.foo;
+上面的代码先整体输入 CJS 模块，然后再根据需要输出具名接口
+
+------------------💖 循环加载 💖------------------
+a脚本 的执行依赖 b脚本，而 b脚本 的执行又依赖 a脚本
+
+通常，循环加载表示存在强耦合，若处理不好，可能会出现问题
+
+
+---------------💖 CJS 模块的加载原理 💖---------------
+CJS 中的一个模块，就是一个脚本文件，require 命令第一次加载某脚本，就会执行整个脚本，然后在内存中生成一个对象。
+{
+  id: '...',
+  exports: { ... },
+  loaded: true,
+  ...
+}
+该对象的 id 属性是模块名，exports 属性是模块输出的各个接口，loaded 属性是一个布尔值，表示该模块的脚本是否执行完毕，
+
+以后要用到这个模块时，就会到 exports 属性上面取值，即使再次执行 require 命令，也不会再次执行该模块，而是到缓存中取值
+即 CJS 模块无论被加载多少次，都只会在第一次加载时运行一次，以后再加载，就返回第一次运行的结果，除非手动清理系统缓存
+
+---💖 CJS 的循环加载 ---
+CJS 模块的重要特性是加载时执行，即脚本代码在 require 的时候，就会全部执行。一旦出现某个模块被 “循环加载”，就只输出已经执行的部分，还未执行的部分不会输出
+// a.js
+exports.done = false;
+var b = require('./b.cjs');
+console.log(`在 a.js 中: b.done = ${b.done}`);
+exports.done = true;
+console.log('a.js 执行完毕');
+// b.js
+exports.done = false;
+var a = require('./a.cjs');
+console.log(`在 b.js 中: a.done = ${a.done}`);
+exports.done = true;
+console.log('b.js 执行完毕');
+// main.js
+var a = require('./a.cjs');
+var b = require('./b.cjs');
+console.log(`在 main.js 中: a.done = ${a.done}, b.done = ${b.done}`);
+// 打印结果
+在 b.js 之中，a.done = false
+b.js 执行完毕
+在 a.js 之中，b.done = true
+a.js 执行完毕
+在 main.js 之中, a.done=true, b.done=true
+
+总之：CJS 输出的是被输出值的拷贝，不是引用
+CJS 模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是代码全部执行后的值。
+
+---💖 ESM 的循环加载 ---
+ESM 处理“循环加载”与 CJS 有本质的不同，ESM 是动态引用，若使用 import 从一个模块加载变量（即 import foo from 'foo'），那些变量不会被缓存，而是成为一个指向被加载变量的引用，需要开发者自己保证，真正取值的时候可以取到值。

@@ -1,0 +1,159 @@
+------------------💖ES7(2016)💖------------------
+
+1. includes
+  判断数组是否包含某个元素，包含 NaN，解决 indexOf 无法查找 NaN 的问题
+
+2. 指数运算符 **
+
+------------------💖ES8(2017)💖------------------
+
+1. values
+  将对象的 value 以数组的形式返回
+
+2. entries
+  将对象以 key-value 的形式二维数组返回，使之可以使用 for of
+
+3. Object.getOwnPropertyDescritptor(obj)
+  获取对象的描述信息
+
+4. padStart/padEnd
+  在字符串 前/后 追加指定字符串
+  作用：一般用来对齐字符串输出
+  参数：targetLength 填充后的目标长度 | padString 填充的串
+
+5. Trailing commas 尾逗号
+  此前，函数定义和调用时，都不允许最后一个参数后面出现逗号
+
+6. async/await
+  作用：对 promise 的进一步语义化，方便书写
+  注意：await 后不必写 then，因为 await 作用之一就是获取后面 Promise 对象成功状态传递出来的参数
+  缺陷：可能会阻塞，可使用 Promise.all 或 map 一下再操作
+
+------------------💖ES9(2018)💖------------------
+
+1. Rest & Spread
+
+2. for await of
+
+3. Promise.prototype.finally
+  作用：无论 resolve 还是 reject 最后都会执行，收尾函数
+  可以用于 loading 的关闭
+
+4. String 扩展
+
+------------------💖ES10(2019)💖------------------
+
+1. Object.fromEntries
+  该方法把 键值对列表 转换为一个对象，与 Object.entries 相对
+  应用：1. Object转换操作 2. Map 转 Object 3. 过滤对象 4. url 的 search 参数转换
+
+2. Array.prototype.flat
+  该方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回
+
+3. Array.prototype.flatMap
+  map + flat
+
+4. String.prototype.trimStart/End
+  从字符串的开头删除空格，trimLeft为别名
+
+5. 可选的 Catch Binding
+  ES10 开始，可以省略 try catch 中的 err
+  应用：验证参数是否为 JSON 格式（只关心是否 true 或 false）
+
+6. Symbol.prototype.descritpion
+  可以通过该方法获得 Symbol 的描述
+
+7. JSON.stringify 修复
+  修复了对于一些超出范围的 Unicode 展示错误的问题
+
+8. 修订 Function.prototype.toString
+  之前函数的 toString 方法来自 Object.prototype.toString
+  现在 Function.prototype.toString 方法返回一个表示当前函数源代码的字符串，以前只会返回这个函数且不包含注释空格等。
+
+9. 稳定的 Array.prototype.sort
+  早先的 ES 没有规定，而是留给浏览器自己决定，ES2019 中明确规定了，Array.prototype.sort() 的默认排序算法必须稳定
+
+------------------💖ES11(2020)💖------------------
+
+1. 空值合并运算符 --?? Nullish coalescing Operator
+  a. ?? 是一个逻辑操作符，当左侧操作数为 null 或 undefined时，返回其右侧操作数，否则返回左侧操作数
+  b. 区别：与 逻辑或(||) 不同，逻辑或 会在左侧为 falsy 时返回右侧操作数 (空串/ null/ undefined/ NaN/ false)
+  c. 不可以将 ?? 直接与 &&、||组合使用
+
+2. 可选链 --?. Optional chaining
+  a. 介绍：允许读取位于连接对象链深处的属性的值，在之前的语法中，想获取深层属性或方法，不得不做前置检验，否则很容易出现 Uncaught TypeError: Cannot read property...错误，故可选链可以大量简化繁琐的前置校验操作，且更安全
+  b. 若不存在，则返回 undefined
+  c. 可选连不能用于赋值！！！
+
+3. globalThis
+  不同环境下，从不同 JavaScript 环境中获取的 全局对象 不同，在 Web 中，可以通过 window、self 拿到全局对象，在 NodeJS 中，则需要使用 global 得到，记住：不管什么环境都用 globalThis 就行
+
+4. BigInt
+  a. 介绍：内置对象，提供一种方法来表示大于 2^53 - 1 的整数，BigInt可以表示任意大的整数
+  b. 使用方式：数字后面加 n / 使用 BigInt函数包裹
+  c. 比较：BigInt 与 Number 不严格相等，但可宽松相等
+  d. 注意：不能用于 Math 对象中的方法，不要与 Number 混合运算
+
+5. String.prototype.matchAll
+  返回一个包含所有匹配正则表达式的结果 及 分组捕获组的迭代器
+
+6. Promise.allSettled
+
+7. Dynamic Import 动态引入
+
+------------------💖ES12(2021)💖------------------
+
+1. 逻辑运算符和赋值表达式 &&=、||=、??=
+  &&= 等效于 x && (x = y) --> x 为 真 时，x = y
+  ||= 等效于 x || (x = y) --> x 为 假 时，x = y
+  ??= 等效于 x ?? (x = y) --> x 为 nullish 时，x = y
+
+2. String.prototype.replaceAll
+  返回一个新字符串，新字符串中所有满足 pattern 的部分都会被 replacement 替换，pattern 可以是 一个字符串或一个 RegExp，replacement 可以是一个字符串或一个在每次匹配时被调用的函数
+
+3. 数字分隔符
+  允许 JS 的数值使用下划线(_)作为分隔符
+  分隔符没有指定间隔的位数，一/两/三/...均可
+  1_000_000_000_000、12_000
+  0.000_001、1e10_000 也可
+  注意：但不能放在小数点前后、e的前后、不可最前/后
+
+4. Promise.any
+
+5. WeakRef & Finalizers
+
+------------------💖ES13(2022)💖------------------
+
+1. 类字段声明
+  a. ES13 之前，类字段只能在构造函数中声明，与许多其他语言不同，之前并不能在类的最外层范围内声明或定义它们
+  b. 现在消除了这个限制
+
+2. 私有方法和字段
+  以前不能在类中声明私有成员，成员通常以下划线(_)为前缀，表示它是私有的，但仍然可以从类外部访问和修改
+  ES13 开始，现在可以使用 井号(#)，试图从外部访问它们都会导致错误
+
+3. await
+  ES13 可以直接使用 await，而不用 async
+
+4. 静态类字段、静态私有方法
+  静态方法可以使用 this 关键字访问类中的其他 私有/公共静态成员，实例方法可以使用 this.constructor 访问它们
+
+5. 类静态块
+
+6. 使用 in 运算符检查一个对象是否有特定的私有字段
+  in 运算符可以正确区分不同类的同名私有字段
+
+7. at
+  可以用该方法更方便地访问数组末尾的第 N 个元素
+  如 arr.at(-1)，除了数组，String 和 TypedArray也有 at 方法
+
+8. Object.hasOwn
+  a. 在 JS 中，可以使用 Object.prototype.hasOwnProperty 来检查对象是否具有给定的属性
+  b. 缺陷：该方法不受保护，它可以通过类定义自定义 hasOwnProperty() 方法来覆盖，该方法可能具有与 Object.prototype.hasOwnProperty 完全不同的行为
+  c. 对于 null 原型创建的对象，对其调用此方法会导致错误，可以通过用 Object.prototype.hasOwnProperty.call 来解决，但不方便
+  d. 直接使用 Object.hasOwn(object, key)
+
+9. 错误原因
+  错误对象现在有 cause 属性，用于指定导致即将抛出的错误的原始错误，有助于为错误添加额外的上下文信息并帮助诊断意外行为，通过在作为第二个参数传递给 Error() 构造函数的对象上设置 cause 属性来指定错误的原因，如 new Error("error", {cause: err})
+
+10. findLast & findLastIndex

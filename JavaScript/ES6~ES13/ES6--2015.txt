@@ -1,0 +1,77 @@
+ES6新特性的分类
+归为 4 类：
+1. 原有语法不足
+2. 原有语法增强
+3. 全新的对象、方法、功能
+4. 全新数据类型和数据结构
+
+------------------💖ES7(2016)💖------------------
+
+1. let、const 块级作用域以及和 var 的区别
+
+2. 解构-快速提取数组/对象中元素
+
+3. 模板字符串(换行、插值)
+
+4. 字符串扩展方法(includes/startsWith/endsWith)
+
+5. 参数默认值 & 剩余参数
+  默认参数为形成一个单独的作用域
+
+6. 展开数组
+
+7. 箭头函数(简化、this)
+
+8. 对象字面量增强(同名属性省略、函数省略key:value、计算属性)
+
+9. Object.assign(t1, t2, ...tN) 复制合并对象
+
+10. Object.is(val1, val2) 解决 === 问题
+
+11. Proxy(obj, handler) 代理一个对象的所有，包括读写操作和各种操作的监听
+与 Object.defineProperty对比
+  A. 优势：有许多 defineProperty 没有的属性方法
+    handler.getPrototypeOf
+    handler.setPrototypeOf
+    handler.isExtensible
+    handler.preventExtensions
+    getOwnPropertyDescritptor
+    defineProperty
+    has            -- in 操作符的监听器
+    construct      -- new 操作符的监听器
+    apply          -- 函数调用操作的监听器
+    deleteProperty -- delete 操作符的监听器
+    get/set        -- 属性 读取/设置 操作的监听器
+    ownKeys        -- Object.getOwnPropertyNames/  getOwnPropertySymbols 方法的监听器
+  B. 对数组的监视更方便
+  C. 以非侵入的方式监管对象的读写
+
+12. Reflect(集成 Object 操作的所有方法，统一、方便)
+
+13. Promise
+
+14. Class & 静态方法 & 继承
+  实例方法：需要实例化之后才能使用，this 指向实例
+  静态方法：用 static 修饰符修饰，通过类名直接调用，不需要实例化，this 不指向实例而是当前类
+
+15. Set(不允许重复元素，可用于去重)
+
+16. Map(键不会转换为字符串，而是保持原有类型)
+
+17. Symbol(用来定义一个唯一的变量)
+  a. 创建唯一变量，解决对象键名重复问题
+  b. 为对象、类、函数等创建私有属性
+  c. 修改对象的 toString 标签
+  d. 为对象添加迭代器属性
+  通过 Object.getOwnPropertySymbols(object) 获得
+
+18. for...of...
+  作用：用统一的方式，遍历所有引用数据类型
+
+19. 迭代器模式
+  作用：通过 Symbol.iterator 对外提供统一的接口，获取内部数据，外部可用 for...of... 迭代内部数据
+
+20. Generator 生成器
+  函数前加 *，代表生成器，一般配合 yield 关键字使用
+  最大特点，惰性执行，调用 next 才会往下执行
+  主要用来解决异步回调过深的问题
