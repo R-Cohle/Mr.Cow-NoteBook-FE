@@ -1,4 +1,4 @@
-class SegmentTree {
+export default class SegmentTree {
   constructor(arr, merger) {
     this.len = arr.length;
     this.data = new Array(len);

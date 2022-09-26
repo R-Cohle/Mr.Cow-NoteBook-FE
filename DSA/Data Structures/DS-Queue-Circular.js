@@ -10,7 +10,7 @@ class ListNode {
 }
 
 // 定义循环队列
-class CircularQueue {
+export default class CircularQueue {
   constructor(capacity) {
     // 目前队列内的元素数量
     this.count = 0;

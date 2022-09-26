@@ -5,7 +5,7 @@
  * 这里就实现一个非常简易的单向链表
  */
 
-class Stack {
+export default class Stack {
   constructor() {
     this.stack = new LinkedList();
   }

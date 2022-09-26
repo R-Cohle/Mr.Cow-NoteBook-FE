@@ -1,4 +1,4 @@
-class Heap {
+export default class Heap {
   constructor(compareFn) {
     this.compareFn = compareFn;
     this.heap = [];
@@ -62,5 +62,5 @@ class Heap {
 }
 
 // 根据传入的比较函数，决定要小顶堆还是大顶堆
-const minHeap = new Heap((a, b) => b > a);
-const maxHeap = new Heap((a, b) => a > b);
+// const minHeap = new Heap((a, b) => b > a);
+// const maxHeap = new Heap((a, b) => a > b);

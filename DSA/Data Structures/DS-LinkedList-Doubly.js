@@ -10,7 +10,7 @@ class ListNode {
 }
 
 // 双向链表
-class DoublyLinkedList {
+export default class DoublyLinkedList {
   constructor() {
     // 生成虚拟头、尾节点
     this.head = new ListNode(-1);

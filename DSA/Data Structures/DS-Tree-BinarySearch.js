@@ -8,7 +8,7 @@ class Node {
 }
 
 // 二叉搜索树
-class BinarySearchTree {
+export default class BinarySearchTree {
   static ZERO = 0;
 
   constructor(compareFn) {

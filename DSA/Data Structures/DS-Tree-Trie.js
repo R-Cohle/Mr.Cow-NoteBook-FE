@@ -19,7 +19,7 @@ class TrieNode {
 }
 
 // Trie 树
-class Trie {
+export default class Trie {
   constructor() {
     this.root = new TrieNode();
   }

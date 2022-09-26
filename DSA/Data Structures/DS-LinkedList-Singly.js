@@ -9,7 +9,7 @@ class ListNode {
 }
 
 // 单向链表定义
-class SinglyLinkedList {
+export default class SinglyLinkedList {
   constructor() {
     // 头节点
     this.head = null;

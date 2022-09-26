@@ -1,6 +1,6 @@
 // 这里借助 JS 中的 数组 + 双向链表实现 hashTable
 
-class HashTable {
+export default class HashTable {
   /**
    * 至于这里为什么取 31
    * 可以看一下 stack overflow 的回答，链接🔗如下

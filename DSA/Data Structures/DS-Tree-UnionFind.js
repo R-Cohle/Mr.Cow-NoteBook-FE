@@ -190,3 +190,5 @@ class UnionFind_v4 {
     }
   }
 }
+
+export { UnionFind_v1, UnionFind_v2, UnionFind_v3, UnionFind_v4 };
